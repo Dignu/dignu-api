@@ -8,23 +8,36 @@ use Src\DAO\UserDAO;
 
 final class UserController
 {
+    private UserDAO $userDAO;
 
-
-    public function algo(Request $request, Response $response, array $args): Response
+    public function __construct(UserDAO $userDAO)
     {
-
-        $response->getBody()->write("Controller teste");
-
-        return $response;
-    }
-    public function getUsers(Request $request, Response $response, array $args): Response
-    {
-
-        $usersDAO = new UserDAO();
-        $result = $usersDAO->getAll();
-        $response = $response->withBody($result);
-
-        return $response;
+        $this->userDAO = $userDAO;
     }
 
+
+    public function createUser(Request $request, Response $response, array $args): Response
+    {
+        $data = json_decode($request->getBody(), true);
+
+        $requiredFields = ['email', 'name', 'password', 'accessType'];
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field]) || empty($data[$field])) {
+                return $response->withStatus(400);
+            }
+        }
+
+        try {
+            $this->userDAO->createUser(
+                $data['email'],
+                $data['name'],
+                $data['password'],
+                $data['accessType']
+            );
+        } catch (\Exception $e) {
+            return $response->withStatus(400);
+        }
+
+        return $response->withStatus(201);
+    }
 }
