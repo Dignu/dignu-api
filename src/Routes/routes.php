@@ -19,7 +19,7 @@ return function (App $app) {
         $response->getBody()->write("Welcome to DignuAPI, more information in: github.com/Dignu");
         return $response;
     });
-    
+    //Public routes
     $app->group('/v1', function (RouteCollectorProxy $group) {
         $group->get('/', function ($request, $response, array $args) {
             $response->getBody()->write("Welcome to DignuAPI v1, more information in: github.com/Dignu");
@@ -27,10 +27,12 @@ return function (App $app) {
         });
         $group->post('/user', UserController::class . ':createUser');
         $group->post('/auth', AuthController::class . ':login');
-
+    
+    });
+    //Authenticated routes
+    $app->group('/v1', function (RouteCollectorProxy $group) {
         $group->get('/auth', function ($request, $response, array $args) {
             $response->getBody()->write("Welcome to DignuAPI auth, more information in: github.com/Dignu");
-
             return $response;
         })->add(AuthMiddleware::class);
     
