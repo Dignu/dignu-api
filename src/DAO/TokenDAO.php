@@ -44,12 +44,13 @@ class TokenDAO extends DBHelper
 {
     $token = $this->getTokenByEmail($userEmail);
 
-    if ($token->getAccessToken() !== base64_encode($accessToken)) {
-        throw new \Exception("Invalid access token.");
+    if ($token->getAccessToken() != $accessToken) {
+
+        throw new \Exception("Token inválido.");
     }
 
     if (new \DateTime() > $token->getAccessTokenExpiration()) {
-        throw new \Exception("Access token has expired.");
+        throw new \Exception("Token expirado.");
     }
 
     return true;
@@ -60,11 +61,11 @@ public function checkIfRefreshTokenIsValid(string $userEmail, string $refreshTok
     $token = $this->getTokenByEmail($userEmail);
 
     if ($token->getRefreshToken() !== base64_encode($refreshToken)) {
-        throw new \Exception("Invalid refresh token.");
+        throw new \Exception("Refresh token inválido.");
     }
 
     if (new \DateTime() > $token->getRefreshTokenExpiration()) {
-        throw new \Exception("Invalid refresh token.");
+        throw new \Exception("Refresh token inválido.");
     }
 
     return true;
