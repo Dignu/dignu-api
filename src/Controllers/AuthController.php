@@ -45,5 +45,23 @@ final class AuthController
             return $response;
         }
     }
+    public function refreshToken(Request $request, Response $response, array $args): Response
+    {
+        try {
+            $refreshTokenHeader = $request->getHeaderLine('refreshToken');
+            $emailHeader = $request->getHeaderLine('email');
 
+            $this->tokenDAO->checkIfRefreshTokenIsValid($emailHeader, $refreshTokenHeader);
+            $token = $this->jwtGenerator->generateTokenModel($emailHeader);  
+            $this->tokenDAO->saveOrUpdate($token);
+            $response->getBody()->write(json_encode(['accessToken' => $token->getAccessToken(), 'refreshToken' => $token->getRefreshToken()]));
+            return $response
+                      ->withHeader('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            $response = new \Slim\Psr7\Response();
+            $response->getBody()->write(json_encode(["error" => $e->getMessage()]));
+            return $response->withStatus(401)
+                            ->withHeader('Content-Type', 'application/json');
+        }
+    }
 }

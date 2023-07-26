@@ -60,7 +60,7 @@ public function checkIfRefreshTokenIsValid(string $userEmail, string $refreshTok
 {
     $token = $this->getTokenByEmail($userEmail);
 
-    if ($token->getRefreshToken() !== base64_encode($refreshToken)) {
+    if ($token->getRefreshToken() !== $refreshToken) {
         throw new \Exception("Refresh token inválido.");
     }
 
