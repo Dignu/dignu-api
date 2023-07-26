@@ -6,11 +6,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Run cpanel-ssh action
-        uses: cpanel/action-cpanel-ssh@v1
+      - name: Run ssh action
+        uses: peaceiris/actions/ssh-action@v2
         with:
           host: ${{ secrets.SSH_SERVER }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
-          commands: 'cd ${{ secrets.PROJECT_PATH }} && git pull && composer update && composer dump-autoload'
+          commands:
+            - cd ${{ secrets.PROJECT_PATH }}
+            - git pull
+            - composer update
+            - composer dump-autoload
