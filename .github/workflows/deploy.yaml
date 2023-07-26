@@ -12,8 +12,4 @@ jobs:
           host: ${{ secrets.SSH_SERVER }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
-          commands:
-            - cd ${{ secrets.PROJECT_PATH }}
-            - git pull
-            - composer update
-            - composer dump-autoload
+          commands: 'cd ${{ secrets.PROJECT_PATH }} && git pull && composer update && composer dump-autoload'
