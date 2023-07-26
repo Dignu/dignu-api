@@ -8,6 +8,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Install sshpass
         run: sudo apt-get update && sudo apt-get -y install sshpass
+      - name: echoes
+        run: echo ${{ secrets.SSH_PASSWORD }} && echo ${{ secrets.SSH_USER }} && echo ${{ secrets.SSH_SERVER }} 
       - name: SSH and run commands
         env:
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }} # Defina a senha como um secret no GitHub
