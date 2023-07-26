@@ -6,10 +6,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Run ssh action
-        uses: peaceiris/actions/ssh-action@v2
-        with:
-          host: ${{ secrets.SSH_SERVER }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          commands: 'cd ${{ secrets.PROJECT_PATH }} && git pull && composer update && composer dump-autoload'
+      - name: SSH and run commands
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }} # Coloque sua chave SSH privada como secret
+        run: |
+          ssh -o StrictHostKeyChecking=no -i <(echo "$SSH_PRIVATE_KEY") ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} "cd ${{ secrets.PROJECT_PATH }} && git pull && composer update && composer dump-autoload"
