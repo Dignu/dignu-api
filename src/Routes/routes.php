@@ -27,7 +27,10 @@ return function (App $app) {
         });
         $group->post('/user', UserController::class . ':createUser');
         $group->post('/auth', AuthController::class . ':login');
-    
+        $group->post('/refresh-token', AuthController::class . ':refreshToken');
+        //    This route be maked in the future
+        //    $group->post('/forget-password', AuthController::class . ':forgetPassword');
+
     });
     //Authenticated routes
     $app->group('/v1', function (RouteCollectorProxy $group) {
