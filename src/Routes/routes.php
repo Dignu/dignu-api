@@ -34,10 +34,22 @@ return function (App $app) {
     });
     //Authenticated routes
     $app->group('/v1', function (RouteCollectorProxy $group) {
+        //Test routes
         $group->get('/auth', function ($request, $response, array $args) {
             $response->getBody()->write("Welcome to DignuAPI auth, more information in: github.com/Dignu");
             return $response;
-        })->add(AuthMiddleware::class);
-    
+        });
+
+    //Real routes
+    $group->get('/items', function ($request, $response, array $args) {
+        $response->getBody()->write("Welcome to DignuAPI auth, more information in: github.com/Dignu");
+        return $response;
     });
+    $group->post('/order', function ($request, $response, array $args) {
+        $response->getBody()->write("Welcome to DignuAPI auth, more information in: github.com/Dignu");
+        return $response;
+    });
+
+
+    })->add(AuthMiddleware::class);
 };
